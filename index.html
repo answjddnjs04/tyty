@@ -508,8 +508,8 @@
             }
 
             hideError();
-            // TODO: 견적 조회 로직 추가
-            alert('차량 번호가 확인되었습니다: ' + value);
+            // 결과 페이지로 이동
+            window.location.href = 'result.html?car=' + encodeURIComponent(value);
         });
 
         // Enter 키로 제출
