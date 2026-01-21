@@ -115,6 +115,96 @@
             font-weight: 600;
         }
 
+        /* 필터 섹션 */
+        .filter-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 140px;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .filter-select,
+        .filter-input {
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            background: var(--primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .filter-input {
+            width: 100px;
+        }
+
+        .filter-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .km-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .km-range span {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .filter-reset {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-family: inherit;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-reset:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
         /* 섹션 타이틀 */
         .section-header {
             margin-bottom: 24px;
@@ -150,6 +240,10 @@
         .review-card:hover {
             transform: translateY(-4px);
             border-color: rgba(88, 166, 255, 0.3);
+        }
+
+        .review-card.hidden {
+            display: none;
         }
 
         .review-header {
@@ -188,6 +282,21 @@
             font-size: 18px;
             font-weight: 700;
             color: var(--success);
+        }
+
+        .review-specs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .review-spec-tag {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         .review-details {
@@ -231,6 +340,19 @@
         .tag-scrap {
             background: rgba(210, 153, 34, 0.15);
             color: var(--warning);
+        }
+
+        /* 결과 없음 메시지 */
+        .no-results {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 15px;
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
         }
 
         /* CTA 섹션 */
@@ -317,6 +439,28 @@
                 gap: 20px;
             }
 
+            .filter-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-select,
+            .filter-input {
+                width: 100%;
+            }
+
+            .km-range {
+                width: 100%;
+            }
+
+            .km-range .filter-input {
+                flex: 1;
+            }
+
             .cta-section {
                 padding: 32px 24px;
             }
@@ -342,7 +486,7 @@
         <section class="car-info-section">
             <p class="car-number" id="displayCarNumber">12가 3456</p>
             <h1 class="car-title" id="displayCarName">2015년식 현대 그랜저 IG</h1>
-            <p class="car-description">해당 차량의 예상 시세와 실제 거래 사례를 확인해보세요.</p>
+            <p class="car-description">해당 차량과 동일한 모델의 실제 거래 사례를 확인해보세요.</p>
 
             <div class="car-specs">
                 <div class="spec-item">
@@ -364,15 +508,54 @@
             </div>
         </section>
 
+        <!-- 필터 섹션 -->
+        <section class="filter-section">
+            <h3 class="filter-title">상세 조건 필터</h3>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label class="filter-label">변속기</label>
+                    <select class="filter-select" id="filterTransmission">
+                        <option value="all">전체</option>
+                        <option value="auto">자동</option>
+                        <option value="manual">수동</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">색상</label>
+                    <select class="filter-select" id="filterColor">
+                        <option value="all">전체</option>
+                        <option value="white">흰색</option>
+                        <option value="black">검정색</option>
+                        <option value="gray">회색</option>
+                        <option value="silver">은색</option>
+                        <option value="other">기타</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">주행거리</label>
+                    <div class="km-range">
+                        <input type="number" class="filter-input" id="filterKmMin" placeholder="최소" min="0">
+                        <span>~</span>
+                        <input type="number" class="filter-input" id="filterKmMax" placeholder="최대" min="0">
+                        <span>만km</span>
+                    </div>
+                </div>
+
+                <button class="filter-reset" id="filterReset">초기화</button>
+            </div>
+        </section>
+
         <!-- 최근 폐차 견적 섹션 -->
         <section>
             <div class="section-header">
                 <h2 class="section-title">최근 실제 폐차 견적</h2>
-                <p class="section-subtitle">비슷한 차량의 실제 폐차 거래 사례입니다</p>
+                <p class="section-subtitle">현대 그랜저 IG의 실제 폐차 거래 사례입니다</p>
             </div>
 
-            <div class="review-grid">
-                <div class="review-card">
+            <div class="review-grid" id="scrapGrid">
+                <div class="review-card" data-transmission="auto" data-color="white" data-km="18" data-model="그랜저 IG">
                     <span class="tag tag-scrap">폐차</span>
                     <div class="review-header">
                         <div class="review-car-info">
@@ -384,6 +567,10 @@
                             <p class="review-price-value">85만원</p>
                         </div>
                     </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">흰색</span>
+                    </div>
                     <div class="review-details">
                         <span class="review-detail-item">서울 강남구</span>
                         <span class="review-detail-item">일반 폐차</span>
@@ -391,17 +578,21 @@
                     <p class="review-date">2026.01.15 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="auto" data-color="black" data-km="22" data-model="그랜저 IG">
                     <span class="tag tag-scrap">폐차</span>
                     <div class="review-header">
                         <div class="review-car-info">
-                            <p class="review-car-name">현대 그랜저 HG</p>
+                            <p class="review-car-name">현대 그랜저 IG</p>
                             <p class="review-car-year">2013년식 / 22만km</p>
                         </div>
                         <div class="review-price">
                             <p class="review-price-label">폐차 금액</p>
                             <p class="review-price-value">70만원</p>
                         </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">검정색</span>
                     </div>
                     <div class="review-details">
                         <span class="review-detail-item">경기 수원시</span>
@@ -410,7 +601,7 @@
                     <p class="review-date">2026.01.12 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="auto" data-color="gray" data-km="15" data-model="그랜저 IG">
                     <span class="tag tag-scrap">폐차</span>
                     <div class="review-header">
                         <div class="review-car-info">
@@ -422,6 +613,10 @@
                             <p class="review-price-value">95만원</p>
                         </div>
                     </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">회색</span>
+                    </div>
                     <div class="review-details">
                         <span class="review-detail-item">인천 남동구</span>
                         <span class="review-detail-item">일반 폐차</span>
@@ -429,17 +624,21 @@
                     <p class="review-date">2026.01.10 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="manual" data-color="silver" data-km="25" data-model="그랜저 IG">
                     <span class="tag tag-scrap">폐차</span>
                     <div class="review-header">
                         <div class="review-car-info">
-                            <p class="review-car-name">현대 쏘나타 LF</p>
-                            <p class="review-car-year">2015년식 / 20만km</p>
+                            <p class="review-car-name">현대 그랜저 IG</p>
+                            <p class="review-car-year">2014년식 / 25만km</p>
                         </div>
                         <div class="review-price">
                             <p class="review-price-label">폐차 금액</p>
-                            <p class="review-price-value">65만원</p>
+                            <p class="review-price-value">60만원</p>
                         </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">수동</span>
+                        <span class="review-spec-tag">은색</span>
                     </div>
                     <div class="review-details">
                         <span class="review-detail-item">부산 해운대구</span>
@@ -448,17 +647,18 @@
                     <p class="review-date">2026.01.08 거래</p>
                 </div>
             </div>
+            <p class="no-results" id="scrapNoResults">조건에 맞는 폐차 사례가 없습니다</p>
         </section>
 
         <!-- 국내 중고차 판매 섹션 -->
         <section>
             <div class="section-header">
                 <h2 class="section-title">최근 국내 중고차 판매</h2>
-                <p class="section-subtitle">국내에서 중고차로 판매된 비슷한 차량입니다</p>
+                <p class="section-subtitle">현대 그랜저 IG의 국내 중고차 판매 사례입니다</p>
             </div>
 
-            <div class="review-grid">
-                <div class="review-card">
+            <div class="review-grid" id="domesticGrid">
+                <div class="review-card" data-transmission="auto" data-color="white" data-km="12" data-model="그랜저 IG">
                     <span class="tag tag-domestic">국내 판매</span>
                     <div class="review-header">
                         <div class="review-car-info">
@@ -470,6 +670,10 @@
                             <p class="review-price-value">1,250만원</p>
                         </div>
                     </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">흰색</span>
+                    </div>
                     <div class="review-details">
                         <span class="review-detail-item">무사고</span>
                         <span class="review-detail-item">1인 소유</span>
@@ -477,7 +681,7 @@
                     <p class="review-date">2026.01.18 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="auto" data-color="black" data-km="16" data-model="그랜저 IG">
                     <span class="tag tag-domestic">국내 판매</span>
                     <div class="review-header">
                         <div class="review-car-info">
@@ -489,6 +693,10 @@
                             <p class="review-price-value">980만원</p>
                         </div>
                     </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">검정색</span>
+                    </div>
                     <div class="review-details">
                         <span class="review-detail-item">단순 교환</span>
                         <span class="review-detail-item">2인 소유</span>
@@ -496,17 +704,21 @@
                     <p class="review-date">2026.01.14 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="auto" data-color="silver" data-km="14" data-model="그랜저 IG">
                     <span class="tag tag-domestic">국내 판매</span>
                     <div class="review-header">
                         <div class="review-car-info">
-                            <p class="review-car-name">현대 그랜저 HG</p>
-                            <p class="review-car-year">2014년식 / 14만km</p>
+                            <p class="review-car-name">현대 그랜저 IG</p>
+                            <p class="review-car-year">2015년식 / 14만km</p>
                         </div>
                         <div class="review-price">
                             <p class="review-price-label">판매 금액</p>
-                            <p class="review-price-value">850만원</p>
+                            <p class="review-price-value">1,050만원</p>
                         </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">은색</span>
                     </div>
                     <div class="review-details">
                         <span class="review-detail-item">무사고</span>
@@ -514,18 +726,42 @@
                     </div>
                     <p class="review-date">2026.01.11 거래</p>
                 </div>
+
+                <div class="review-card" data-transmission="manual" data-color="gray" data-km="20" data-model="그랜저 IG">
+                    <span class="tag tag-domestic">국내 판매</span>
+                    <div class="review-header">
+                        <div class="review-car-info">
+                            <p class="review-car-name">현대 그랜저 IG</p>
+                            <p class="review-car-year">2014년식 / 20만km</p>
+                        </div>
+                        <div class="review-price">
+                            <p class="review-price-label">판매 금액</p>
+                            <p class="review-price-value">720만원</p>
+                        </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">수동</span>
+                        <span class="review-spec-tag">회색</span>
+                    </div>
+                    <div class="review-details">
+                        <span class="review-detail-item">단순 수리</span>
+                        <span class="review-detail-item">3인 소유</span>
+                    </div>
+                    <p class="review-date">2026.01.09 거래</p>
+                </div>
             </div>
+            <p class="no-results" id="domesticNoResults">조건에 맞는 국내 판매 사례가 없습니다</p>
         </section>
 
         <!-- 해외 수출 판매 섹션 -->
         <section>
             <div class="section-header">
                 <h2 class="section-title">최근 해외 수출 판매</h2>
-                <p class="section-subtitle">해외로 수출되어 더 높은 가격에 판매된 차량입니다</p>
+                <p class="section-subtitle">현대 그랜저 IG의 해외 수출 거래 사례입니다</p>
             </div>
 
-            <div class="review-grid">
-                <div class="review-card">
+            <div class="review-grid" id="exportGrid">
+                <div class="review-card" data-transmission="auto" data-color="white" data-km="19" data-model="그랜저 IG">
                     <span class="tag tag-export">해외 수출</span>
                     <div class="review-header">
                         <div class="review-car-info">
@@ -537,6 +773,10 @@
                             <p class="review-price-value">320만원</p>
                         </div>
                     </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">흰색</span>
+                    </div>
                     <div class="review-details">
                         <span class="review-detail-item">러시아 수출</span>
                         <span class="review-detail-item">사고 이력 있음</span>
@@ -544,17 +784,21 @@
                     <p class="review-date">2026.01.16 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="auto" data-color="black" data-km="25" data-model="그랜저 IG">
                     <span class="tag tag-export">해외 수출</span>
                     <div class="review-header">
                         <div class="review-car-info">
-                            <p class="review-car-name">현대 그랜저 HG</p>
+                            <p class="review-car-name">현대 그랜저 IG</p>
                             <p class="review-car-year">2013년식 / 25만km</p>
                         </div>
                         <div class="review-price">
                             <p class="review-price-label">수출 금액</p>
                             <p class="review-price-value">280만원</p>
                         </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">검정색</span>
                     </div>
                     <div class="review-details">
                         <span class="review-detail-item">중앙아시아 수출</span>
@@ -563,17 +807,21 @@
                     <p class="review-date">2026.01.13 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="auto" data-color="silver" data-km="21" data-model="그랜저 IG">
                     <span class="tag tag-export">해외 수출</span>
                     <div class="review-header">
                         <div class="review-car-info">
-                            <p class="review-car-name">기아 K7</p>
+                            <p class="review-car-name">현대 그랜저 IG</p>
                             <p class="review-car-year">2014년식 / 21만km</p>
                         </div>
                         <div class="review-price">
                             <p class="review-price-label">수출 금액</p>
                             <p class="review-price-value">350만원</p>
                         </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">자동</span>
+                        <span class="review-spec-tag">은색</span>
                     </div>
                     <div class="review-details">
                         <span class="review-detail-item">몽골 수출</span>
@@ -582,17 +830,21 @@
                     <p class="review-date">2026.01.09 거래</p>
                 </div>
 
-                <div class="review-card">
+                <div class="review-card" data-transmission="manual" data-color="gray" data-km="18" data-model="그랜저 IG">
                     <span class="tag tag-export">해외 수출</span>
                     <div class="review-header">
                         <div class="review-car-info">
-                            <p class="review-car-name">현대 쏘나타 LF</p>
+                            <p class="review-car-name">현대 그랜저 IG</p>
                             <p class="review-car-year">2016년식 / 18만km</p>
                         </div>
                         <div class="review-price">
                             <p class="review-price-label">수출 금액</p>
                             <p class="review-price-value">420만원</p>
                         </div>
+                    </div>
+                    <div class="review-specs">
+                        <span class="review-spec-tag">수동</span>
+                        <span class="review-spec-tag">회색</span>
                     </div>
                     <div class="review-details">
                         <span class="review-detail-item">베트남 수출</span>
@@ -601,6 +853,7 @@
                     <p class="review-date">2026.01.05 거래</p>
                 </div>
             </div>
+            <p class="no-results" id="exportNoResults">조건에 맞는 해외 수출 사례가 없습니다</p>
         </section>
 
         <!-- CTA 섹션 -->
@@ -638,6 +891,96 @@
         document.getElementById('displayMaker').textContent = dummyCarData.maker;
         document.getElementById('displayModel').textContent = dummyCarData.model;
         document.getElementById('displayEngine').textContent = dummyCarData.engine;
+
+        // 필터 요소들
+        const filterTransmission = document.getElementById('filterTransmission');
+        const filterColor = document.getElementById('filterColor');
+        const filterKmMin = document.getElementById('filterKmMin');
+        const filterKmMax = document.getElementById('filterKmMax');
+        const filterReset = document.getElementById('filterReset');
+
+        // 색상 매핑
+        const colorMap = {
+            'white': '흰색',
+            'black': '검정색',
+            'gray': '회색',
+            'silver': '은색',
+            'other': '기타'
+        };
+
+        // 필터 적용 함수
+        function applyFilters() {
+            const transmission = filterTransmission.value;
+            const color = filterColor.value;
+            const kmMin = filterKmMin.value ? parseInt(filterKmMin.value) : null;
+            const kmMax = filterKmMax.value ? parseInt(filterKmMax.value) : null;
+
+            const grids = [
+                { grid: document.getElementById('scrapGrid'), noResults: document.getElementById('scrapNoResults') },
+                { grid: document.getElementById('domesticGrid'), noResults: document.getElementById('domesticNoResults') },
+                { grid: document.getElementById('exportGrid'), noResults: document.getElementById('exportNoResults') }
+            ];
+
+            grids.forEach(({ grid, noResults }) => {
+                const cards = grid.querySelectorAll('.review-card');
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const cardTransmission = card.dataset.transmission;
+                    const cardColor = card.dataset.color;
+                    const cardKm = parseInt(card.dataset.km);
+
+                    let show = true;
+
+                    // 변속기 필터
+                    if (transmission !== 'all' && cardTransmission !== transmission) {
+                        show = false;
+                    }
+
+                    // 색상 필터
+                    if (color !== 'all' && cardColor !== color) {
+                        show = false;
+                    }
+
+                    // 주행거리 필터
+                    if (kmMin !== null && cardKm < kmMin) {
+                        show = false;
+                    }
+                    if (kmMax !== null && cardKm > kmMax) {
+                        show = false;
+                    }
+
+                    if (show) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // 결과 없음 메시지 표시
+                if (visibleCount === 0) {
+                    noResults.classList.add('show');
+                } else {
+                    noResults.classList.remove('show');
+                }
+            });
+        }
+
+        // 필터 이벤트 리스너
+        filterTransmission.addEventListener('change', applyFilters);
+        filterColor.addEventListener('change', applyFilters);
+        filterKmMin.addEventListener('input', applyFilters);
+        filterKmMax.addEventListener('input', applyFilters);
+
+        // 초기화 버튼
+        filterReset.addEventListener('click', () => {
+            filterTransmission.value = 'all';
+            filterColor.value = 'all';
+            filterKmMin.value = '';
+            filterKmMax.value = '';
+            applyFilters();
+        });
     </script>
 </body>
 </html>
